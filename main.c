@@ -16,8 +16,10 @@ struct circle {
 
 int main(int argc, char** argv)
 {
-    int i = 1;
-    int n, SR, D;
+    struct circle* circle;
+    int nCircle = 0, nTriangle = 0, nPolygon = 0;
+    int n = 0;
+    int SR, D;
     double P, S;
     char str[100];
     FILE* data = argc > 1 ? fopen(argv[1], "r") : stdin;
@@ -25,15 +27,31 @@ int main(int argc, char** argv)
         printf("Error opening file");
         return 1;
     }
-    fscanf(data, "%d\n", &n);
-    struct circle* circle = malloc(sizeof(*circle) * n);
+
     while (fgets(str, 100, data) != NULL) {
-        circle[i - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
-        circle[i - 1].point.y = strtod(strchr(str, ' ') + 1, NULL);
-        circle[i - 1].r = strtod(strchr(str, ',') + 1, NULL);
-        i++;
+        n = nCircle + nTriangle + nPolygon;
+        if (!(strncmp("circle", str, 6))) {
+            nCircle++;
+            circle = realloc(circle, nCircle * (sizeof(struct circle)));
+            circle[nCircle - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
+            circle[nCircle - 1].point.y = strtod(strchr(str, ' ') + 1, NULL);
+            circle[nCircle - 1].r = strtod(strchr(str, ',') + 1, NULL);
+
+        } else if (!(strncmp("triangle", str, 8))) {
+            nTriangle++;
+            continue;
+        } else if (!(strncmp("polygon", str, 7))) {
+            nPolygon++;
+            continue;
+        } else {
+            printf("%s \n^\n", str);
+            printf("Eror at column 0: expected \'circle\', \'triangle\' or "
+                   "\'polygon\'\n\n");
+            continue;
+        }
     }
-    for (int i = 0; i < n; i++) {
+
+    for (int i = 0; i < nCircle; i++) {
         printf(" %d. circle(%.2lf %.2lf, %.2lf) \n",
                i + 1,
                circle[i].point.x,
@@ -44,7 +62,7 @@ int main(int argc, char** argv)
         printf("\tperimetr = %f\n", P);
         printf("\tarea = %f\n", S);
         printf("\tintersects: \n");
-        for (int j = 0; j < n - 1; j++) {
+        for (int j = 0; j < nCircle - 1; j++) {
             if (i == j)
                 continue;
             SR = circle[j].r + circle[j + 1].r;
