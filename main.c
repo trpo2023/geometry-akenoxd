@@ -14,6 +14,12 @@ struct circle {
     double r;
 };
 
+struct triangle {
+    struct point A;
+    struct point B;
+    struct point C;
+};
+
 int main(int argc, char** argv)
 {
     struct circle* circle;
@@ -31,6 +37,18 @@ int main(int argc, char** argv)
     while (fgets(str, 100, data) != NULL) {
         n = nCircle + nTriangle + nPolygon;
         if (!(strncmp("circle", str, 6))) {
+            if (strtod(strchr(str, ',') + 1, NULL) <= 0) {
+                printf("%s", str);
+                for (int i = 0; i < strchr(str, ',') - &str[0] + 2; i++)
+                    printf(" ");
+                printf("^\n");
+                printf("Error at column %ld: radius cant be \'0\' or "
+                       "negative "
+                       "value\n\n",
+                       strchr(str, ',') - &str[0] + 2);
+                continue;
+            }
+
             nCircle++;
             circle = realloc(circle, nCircle * (sizeof(struct circle)));
             circle[nCircle - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
