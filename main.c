@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 struct point {
     double x;
@@ -12,17 +14,18 @@ struct circle {
 
 int main()
 {
-    struct circle circle[10];
-    int n = 0;
-
-    scanf("%d", &n);
-
-    for (int i = 0; i < 3; i++) {
-        scanf("circle(%lf %lf, %lf)\n",
-              &circle[i].point.x,
-              &circle[i].point.y,
-              &circle[i].r);
+    double n;
+    char str[100];
+    FILE* data;
+    data = fopen("example", "r");
+    if (data == NULL) {
+        printf("Error opening file");
+        return 1;
     }
-
+    while (fgets(str, 100, data) != NULL) {
+        n = strtod(strchr(str, '(') + 1, NULL);
+        printf("%.2f \n", n);
+        puts(str);
+    }
     return 0;
 }
