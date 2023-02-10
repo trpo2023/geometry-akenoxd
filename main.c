@@ -14,14 +14,13 @@ struct circle {
     double r;
 };
 
-int main()
+int main(int argc, char** argv)
 {
     int i = 1;
     int n, SR, D;
     double P, S;
     char str[100];
-    FILE* data;
-    data = fopen("example", "r");
+    FILE* data = argc > 1 ? fopen(argv[1], "r") : stdin;
     if (data == NULL) {
         printf("Error opening file");
         return 1;
@@ -52,7 +51,7 @@ int main()
             D
                     = sqrt(pow(circle[i].point.x - circle[j].point.x, 2)
                            + pow(circle[i].point.y - circle[j].point.y, 2));
-            if (SR > D)
+            if (SR >= D)
                 printf("\t  %d. circle \n", j + 1);
         }
         printf("\n");
