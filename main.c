@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,46 +20,70 @@ struct triangle {
     struct point B;
     struct point C;
 };
+int Check_Error(char* str)
+{
+    if (!(strncmp("circle", str, 6))) {
+        if (!(isdigit(*strchr(str, '(')))) {
+            printf("%s", str);
+            for (int i = 0; i < strchr(str, '(') - &str[0] + 1; i++)
+                printf(" ");
+            printf("^\n");
+            printf("Error at column %ld: expected \'double\'\n\n",
+                   strchr(str, '(') - &str[0] + 1);
+        }
+        if (strtod(strchr(str, ',') + 1, NULL) <= 0) {
+            printf("%s", str);
+            for (int i = 0; i < strchr(str, ',') - &str[0] + 2; i++)
+                printf(" ");
+            printf("^\n");
+            printf("Error at column %ld: radius cant be \'0\' or "
+                   "negative "
+                   "value\n\n",
+                   strchr(str, ',') - &str[0] + 2);
+            return 0;
+        } else
+            return 1;
+    } else if (!(strncmp("triangle", str, 8))) {
+    } else if (!(strncmp("polygon", str, 7))) {
+    } else {
+        printf("%s \n^\n", str);
+        printf("Eror at column 0: expected \'circle\', \'triangle\' or "
+               "\'polygon\'\n\n");
+        return 0;
+    }
+}
 
 int main(int argc, char** argv)
 {
     struct circle* circle;
+    struct triangle* triangle;
     int nCircle = 0, nTriangle = 0, nPolygon = 0;
-    int n = 0;
+    int n = 0, code;
     int SR, D;
     double P, S;
     char str[100];
     FILE* data = argc > 1 ? fopen(argv[1], "r") : stdin;
     if (data == NULL) {
-        printf("Error opening file");
+        printf("Error: file not found\n");
         return 1;
     }
 
     while (fgets(str, 100, data) != NULL) {
         n = nCircle + nTriangle + nPolygon;
-        if (!(strncmp("circle", str, 6))) {
-            if (strtod(strchr(str, ',') + 1, NULL) <= 0) {
-                printf("%s", str);
-                for (int i = 0; i < strchr(str, ',') - &str[0] + 2; i++)
-                    printf(" ");
-                printf("^\n");
-                printf("Error at column %ld: radius cant be \'0\' or "
-                       "negative "
-                       "value\n\n",
-                       strchr(str, ',') - &str[0] + 2);
-                continue;
-            }
-
+        code = Check_Error(str);
+        if (!code)
+            continue;
+        if (code == 1) {
             nCircle++;
             circle = realloc(circle, nCircle * (sizeof(struct circle)));
             circle[nCircle - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
             circle[nCircle - 1].point.y = strtod(strchr(str, ' ') + 1, NULL);
             circle[nCircle - 1].r = strtod(strchr(str, ',') + 1, NULL);
-
-        } else if (!(strncmp("triangle", str, 8))) {
+        } else if (code == 2) {
             nTriangle++;
+
             continue;
-        } else if (!(strncmp("polygon", str, 7))) {
+        } else if (code == 3) {
             nPolygon++;
             continue;
         } else {
