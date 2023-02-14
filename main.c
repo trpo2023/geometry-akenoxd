@@ -44,7 +44,9 @@ int Check_Error(char* str)
         } else
             return 1;
     } else if (!(strncmp("triangle", str, 8))) {
+        return 2;
     } else if (!(strncmp("polygon", str, 7))) {
+        return 3;
     } else {
         printf("%s \n^\n", str);
         printf("Eror at column 0: expected \'circle\', \'triangle\' or "
@@ -81,8 +83,23 @@ int main(int argc, char** argv)
             circle[nCircle - 1].r = strtod(strchr(str, ',') + 1, NULL);
         } else if (code == 2) {
             nTriangle++;
-
-            continue;
+            triangle = realloc(triangle, nTriangle * (sizeof(struct triangle)));
+            triangle[nTriangle - 1].A.x = strtod(strchr(str, '(') + 2, NULL);
+            triangle[nTriangle - 1].A.y = strtod(strchr(str, ' ') + 1, NULL);
+            for (int i = 0; i < strchr(str, ',') - str; i++) {
+                str[i] = ' ';
+                n = i;
+            }
+            str[n + 1] = ' ';
+            triangle[nTriangle - 1].B.x = strtod(strchr(str, ',') + 1, NULL);
+            triangle[nTriangle - 1].B.y = strtod(strchr(str, ' ') + 1, NULL);
+            for (int i = 0; i < strchr(str, ',') - &str[0]; i++) {
+                str[i] = ' ';
+                n = i;
+            }
+            str[n + 1] = ' ';
+            triangle[nTriangle - 1].C.x = strtod(strchr(str, ',') + 1, NULL);
+            triangle[nTriangle - 1].C.y = strtod(strchr(str, ' ') + 1, NULL);
         } else if (code == 3) {
             nPolygon++;
             continue;
@@ -117,6 +134,17 @@ int main(int argc, char** argv)
         }
         printf("\n");
     }
+    for (int i = 0; i < nTriangle; i++) {
+        printf(" %d. triangle(%.2lf %.2lf, %.2lf %.2lf, %.2lf %.2lf) \n",
+               i + 1,
+               triangle[i].A.x,
+               triangle[i].A.y,
+               triangle[i].B.x,
+               triangle[i].B.y,
+               triangle[i].C.x,
+               triangle[i].C.y);
+    }
     return 0;
     free(circle);
+    free(triangle);
 }
