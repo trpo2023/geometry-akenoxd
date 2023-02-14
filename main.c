@@ -23,7 +23,7 @@ struct triangle {
 int Check_Error(char* str)
 {
     if (!(strncmp("circle", str, 6))) {
-        if (!(isdigit(*strchr(str, '(')))) {
+        if (!(isdigit(*(strchr(str, '(') + 1)))) {
             printf("%s", str);
             for (int i = 0; i < strchr(str, '(') - &str[0] + 1; i++)
                 printf(" ");
@@ -64,9 +64,9 @@ int main(int argc, char** argv)
     int SR, D;
     double P, S;
     char str[100];
-    FILE* data = argc > 1 ? fopen(argv[1], "r") : stdin;
+    FILE* data = argc > 1 ? fopen(argv[1], "r") : NULL;
     if (data == NULL) {
-        printf("Error: file not found\n");
+        printf("Error: incorrect file path, use ./app [FILE]\n");
         return 1;
     }
 
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
             continue;
         }
     }
-
+    printf("\n");
     for (int i = 0; i < nCircle; i++) {
         printf(" %d. circle(%.2lf %.2lf, %.2lf) \n",
                i + 1,
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
                triangle[i].C.x,
                triangle[i].C.y);
     }
-    return 0;
     free(circle);
     free(triangle);
+    return 0;
 }
