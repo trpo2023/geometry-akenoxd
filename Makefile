@@ -1,5 +1,6 @@
-all:
+all: app
+
+app: main.c
 	gcc -Wall main.c -o app -lm
 run:
-	gcc -Wall main.c -o app -lm
 	./app example
