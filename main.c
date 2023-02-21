@@ -18,13 +18,36 @@ int Check_Error(char* str)
 {
     if (!(strncmp("circle", str, 6))) {
         if (!(isdigit(*(strchr(str, '(') + 1)))
-            && !(*(strchr(str, '(') + 1) = '-')) {
+            && !(*(strchr(str, '(') + 1) == '-')
+            && !(*(strchr(str, '(') + 1) == '+')) {
             printf("%s", str);
             for (int i = 0; i < strchr(str, '(') - &str[0] + 1; i++)
                 printf(" ");
             printf("^\n");
             printf("Error at column %ld: expected \'double\'\n\n",
                    strchr(str, '(') - &str[0] + 1);
+            return 0;
+        }
+        if (!(isdigit(*(strchr(str, ' ') + 1)))
+            && !(*(strchr(str, ' ') + 1) == '-')
+            && !(*(strchr(str, ' ') + 1) == '+')) {
+            printf("%s", str);
+            for (int i = 0; i < (strchr(str, ' ') - &str[0] + 1); i++)
+                printf(" ");
+            printf("^\n");
+            printf("Error at column %ld: expected \'double\'\n\n",
+                   strchr(str, ' ') - &str[0] + 1);
+            return 0;
+        }
+        if (!(isdigit(*(strchr(str, ',') + 2)))
+            && !(*(strchr(str, ',') + 1) == '+')) {
+            printf("%s", str);
+            for (int i = 0; i < (strchr(str, ',') - &str[0] + 2); i++)
+                printf(" ");
+            printf("^\n");
+            printf("Error at column %ld: expected \'double\'\n\n",
+                   strchr(str, ',') - &str[0] + 1);
+            return 0;
         }
         if (strtod(strchr(str, ',') + 1, NULL) <= 0) {
             printf("%s", str);
@@ -50,7 +73,7 @@ int main(int argc, char** argv)
     struct circle* circle;
     int nCircle = 0;
     int code;
-    int SR, D;
+    float SR, D;
     double P, S;
     char str[100];
     FILE* data = argc > 1 ? fopen(argv[1], "r") : NULL;
@@ -83,13 +106,14 @@ int main(int argc, char** argv)
         printf("\tperimetr = %f\n", P);
         printf("\tarea = %f\n", S);
         printf("\tintersects: \n");
-        for (int j = 0; j < nCircle - 1; j++) {
+        for (int j = 0; j < nCircle; j++) {
             if (i == j)
                 continue;
-            SR = circle[j].r + circle[j + 1].r;
+            SR = circle[i].r + circle[j].r;
             D
                     = sqrt(pow(circle[i].point.x - circle[j].point.x, 2)
                            + pow(circle[i].point.y - circle[j].point.y, 2));
+
             if (SR >= D)
                 printf("\t  %d. circle \n", j + 1);
         }
