@@ -1,0 +1,1 @@
+int Check_Error(char* str);
