@@ -1,6 +1,13 @@
-all: app
+CFLAGS = -Wall -Wextra -Werror
+VPATH = src/geometry
 
-app: main.c
-	gcc -Wall main.c -o app -lm
-run:
-	./app example
+all: app 
+
+app: main.o check_error.o
+	$(CC) $(CFLAGS)  obj/main.o obj/check_error.o -o bin/$@  -lm
+
+main.o: main.c
+	$(CC) -c $(CFLAGS) $< -o obj/$@ -I src/lib -lm
+
+check_error.o: check_error.c
+	$(CC) -c $(CFLAGS) $< -o obj/$@
