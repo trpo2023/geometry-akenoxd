@@ -1,12 +1,13 @@
 CFLAGS = -Wall -Wextra -Werror
+VPATH = src/geometry
 
 all: app 
 
 app: main.o check_error.o
-	$(CC) $(CFLAGS) -o  bin/$@ $^ -lm
+	$(CC) $(CFLAGS)  obj/main.o obj/check_error.o -o bin/$@  -lm
 
 main.o: main.c
-	$(CC) -c $(CFLAGS)  -o $@ $< -lm
+	$(CC) -c $(CFLAGS) $< -o obj/$@ -I src/lib -lm
 
 check_error.o: check_error.c
-	$(CC) -c $(CFLAGS) -o $@ $<	
+	$(CC) -c $(CFLAGS) $< -o obj/$@

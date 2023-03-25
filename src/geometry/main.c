@@ -1,4 +1,4 @@
-#include "./check_error.h"
+#include <check_error.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
