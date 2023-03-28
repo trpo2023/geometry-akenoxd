@@ -14,12 +14,33 @@ struct circle {
     double r;
 };
 
+int intersect(struct circle circle1, struct circle circle2)
+{
+    double SR, D;
+    SR = circle1.r + circle2.r;
+    D
+            = sqrt(pow(circle1.point.x - circle2.point.x, 2)
+                   + pow(circle1.point.y - circle2.point.y, 2));
+    if (SR >= D)
+        return 1;
+    else
+        return 0;
+}
+
+float Circle_area(double radius)
+{
+    return M_PI * radius * radius;
+}
+float Circle_perimeter(double radius)
+{
+    return 2 * M_PI * radius;
+}
+
 int main(int argc, char** argv)
 {
     struct circle* circle;
     int nCircle = 0;
     int code;
-    float SR, D;
     double P, S;
     char str[100];
     FILE* data = argc > 1 ? fopen(argv[1], "r") : NULL;
@@ -47,20 +68,13 @@ int main(int argc, char** argv)
                circle[i].point.x,
                circle[i].point.y,
                circle[i].r);
-        P = 2 * M_PI * circle[i].r;
-        S = M_PI * circle[i].r * circle[i].r;
-        printf("\tperimetr = %f\n", P);
-        printf("\tarea = %f\n", S);
+        printf("\tperimetr = %f\n", Circle_perimeter(circle[i].r));
+        printf("\tarea = %f\n", Circle_area(circle[i].r));
         printf("\tintersects: \n");
         for (int j = 0; j < nCircle; j++) {
             if (i == j)
                 continue;
-            SR = circle[i].r + circle[j].r;
-            D
-                    = sqrt(pow(circle[i].point.x - circle[j].point.x, 2)
-                           + pow(circle[i].point.y - circle[j].point.y, 2));
-
-            if (SR >= D)
+            if (intersect(circle[i], circle[j]))
                 printf("\t  %d. circle \n", j + 1);
         }
         printf("\n");
