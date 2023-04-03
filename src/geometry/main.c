@@ -36,32 +36,8 @@ float Circle_perimeter(double radius)
     return 2 * M_PI * radius;
 }
 
-int main(int argc, char** argv)
+void print_result(struct circle* circle, int nCircle)
 {
-    struct circle* circle;
-    int nCircle = 0;
-    int code;
-    double P, S;
-    char str[100];
-    FILE* data = argc > 1 ? fopen(argv[1], "r") : NULL;
-    if (data == NULL) {
-        printf("Error: incorrect file path, use ./app [FILE]\n");
-        return 1;
-    }
-
-    while (fgets(str, 100, data) != NULL) {
-        code = Check_Error(str);
-        if (!code)
-            continue;
-        if (code) {
-            nCircle++;
-            circle = realloc(circle, nCircle * (sizeof(struct circle)));
-            circle[nCircle - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
-            circle[nCircle - 1].point.y = strtod(strchr(str, ' ') + 1, NULL);
-            circle[nCircle - 1].r = strtod(strchr(str, ',') + 1, NULL);
-        }
-    }
-    printf("\n");
     for (int i = 0; i < nCircle; i++) {
         printf(" %d. circle(%.2lf %.2lf, %.2lf) \n",
                i + 1,
@@ -79,6 +55,76 @@ int main(int argc, char** argv)
         }
         printf("\n");
     }
+}
+
+void Print_error(char* str, int n)
+{
+    if (n == 1) {
+        printf("%s", str);
+        for (int i = 0; i < strchr(str, '(') - &str[0] + 1; i++)
+            printf(" ");
+        printf("^\n");
+        printf("Error at column %ld: expected \'double\'\n\n",
+               strchr(str, '(') - &str[0] + 1);
+        return;
+    } else if (n == 2) {
+        printf("%s", str);
+        for (int i = 0; i < (strchr(str, ' ') - &str[0] + 1); i++)
+            printf(" ");
+        printf("^\n");
+        printf("Error at column %ld: expected \'double\'\n\n",
+               strchr(str, ' ') - &str[0] + 1);
+        return;
+    } else if (n == 3) {
+        printf("%s", str);
+        for (int i = 0; i < (strchr(str, ',') - &str[0] + 2); i++)
+            printf(" ");
+        printf("^\n");
+        printf("Error at column %ld: expected \'double\'\n\n",
+               strchr(str, ',') - &str[0] + 1);
+        return;
+    } else if (n == 4) {
+        printf("%s", str);
+        for (int i = 0; i < strchr(str, ',') - &str[0] + 2; i++)
+            printf(" ");
+        printf("^\n");
+        printf("Error at column %ld: radius cant be \'0\' or "
+               "negative "
+               "value\n\n",
+               strchr(str, ',') - &str[0] + 2);
+        return;
+    } else if (n == 5) {
+        printf("%s \n^\n", str);
+        printf("Eror at column 0: expected \'circle\'\n\n");
+        return;
+    }
+};
+
+int main(int argc, char** argv)
+{
+    struct circle* circle;
+    int nCircle = 0;
+    char str[100];
+    FILE* data = argc > 1 ? fopen(argv[1], "r") : NULL;
+    if (data == NULL) {
+        printf("Error: incorrect file path, use ./app [FILE]\n");
+        return 1;
+    }
+
+    while (fgets(str, 100, data) != NULL) {
+        if (Check_Error(str)) {
+            Print_error(str, Check_Error(str));
+            continue;
+        } else {
+            nCircle++;
+            circle = realloc(circle, nCircle * (sizeof(struct circle)));
+            circle[nCircle - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
+            circle[nCircle - 1].point.y = strtod(strchr(str, ' ') + 1, NULL);
+            circle[nCircle - 1].r = strtod(strchr(str, ',') + 1, NULL);
+        }
+    }
+    printf("\n");
+    print_result(circle, nCircle);
     free(circle);
     return 0;
 }
