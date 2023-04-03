@@ -1,5 +1,5 @@
 CFLAGS = -Wall -Wextra -Werror
-VPATH = src/geometry
+VPATH = src/geometry src/lib obj bin
 
 all: app 
 
