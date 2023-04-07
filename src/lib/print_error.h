@@ -1,0 +1,1 @@
+void Print_Error(char* str, int n);
