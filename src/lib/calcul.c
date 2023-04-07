@@ -1,4 +1,6 @@
+#define _USE_MATH_DEFINES // for C
 #include <math.h>
+#include <stdio.h>
 
 int intersect(int x1, int y1, int x2, int y2, double r1, double r2)
 {
@@ -11,11 +13,11 @@ int intersect(int x1, int y1, int x2, int y2, double r1, double r2)
         return 0;
 }
 
-double Circle_area(double radius)
+float Circle_area(double radius)
 {
     return M_PI * radius * radius;
 }
-double Circle_perimeter(double radius)
+float Circle_perimeter(double radius)
 {
     return 2 * M_PI * radius;
 }
