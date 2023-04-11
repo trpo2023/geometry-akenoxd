@@ -2,3 +2,4 @@ app
 *.o
 .vscode
 lib.a
+*.d
