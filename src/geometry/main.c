@@ -31,7 +31,7 @@ int main(int argc, char** argv)
         }
     }
     printf("\n");
-    print_result(circle, nCircle);
+    Print_Result(circle, nCircle);
     free(circle);
     return 0;
 }

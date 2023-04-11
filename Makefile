@@ -1,31 +1,35 @@
 CFLAGS = -Wall -Wextra -Werror
-CPPFLAGS = -MMD
-VPATH = src/geometry src/lib obj obj/src/geometry obj/src/lib bin
+CPPFLAGS =  -MMD
+OBJPATH = obj/src/lib
 
-all: app 
+all: bin/app 
 
-app: main.o lib.a
-	$(CC) $(CFLAGS) -o bin/$@ $^ -lm
+bin/app: obj/src/geometry/main.o obj/src/lib/lib.a
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-lib.a: calcul.o check_error.o print.o
+obj/src/lib/lib.a: obj/src/lib/print.o obj/src/lib/calcul.o obj/src/lib/check_error.o
 	ar rcs $@ $^
 
-main.o: main.c
-	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o obj/src/geometry/$@ -I src/lib 
+obj/src/geometry/main.o: src/geometry/main.c
+	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o $@ -I src/lib  
 
-print.o: print.c
-	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o obj/src/lib/$@ -I src/lib
+obj/src/lib/print.o: src/lib/print.c
+	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o $@ -I src/lib
 
-check_error.o: check_error.c
-	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o obj/src/lib/$@
+obj/src/lib/check_error.o: src/lib/check_error.c
+	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o $@
 
-calcul.o: calcul.c
-	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o obj/src/lib/$@ -lm
+obj/src/lib/calcul.o: src/lib/calcul.c
+	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o $@ -lm
+
+.PHONY: clean
 
 clean: 
 	rm obj/src/lib/*.o
 	rm obj/src/geometry/*.o
-	rm lib.a
 	rm bin/app
 	rm obj/src/geometry/*.d
 	rm obj/src/lib/*.d
+	rm obj/src/lib/lib.a
+
+-include orj/src/geometry/main.d orj/src/lib/calcul.d orj/src/lib/check_error.d orj/src/lib/print.d
