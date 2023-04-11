@@ -1,3 +1,5 @@
 app
-obj/check_error.o
-obj/main.o
+*.o
+.vscode
+lib.a
+*.d
