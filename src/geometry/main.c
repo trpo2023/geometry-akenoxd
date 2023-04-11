@@ -5,44 +5,7 @@
 
 #include <calcul.h>
 #include <check_error.h>
-#include <print_error.h>
-
-struct point {
-    double x;
-    double y;
-};
-
-struct circle {
-    struct point point;
-    double r;
-};
-
-void print_result(struct circle* circle, int nCircle)
-{
-    for (int i = 0; i < nCircle; i++) {
-        printf(" %d. circle(%.2lf %.2lf, %.2lf) \n",
-               i + 1,
-               circle[i].point.x,
-               circle[i].point.y,
-               circle[i].r);
-        printf("\tperimetr = %.2f\n", Circle_perimeter(circle[i].r));
-        printf("\tarea = %.2f\n", Circle_area(circle[i].r));
-        printf("\tintersects: \n");
-        for (int j = 0; j < nCircle; j++) {
-            if (i == j)
-                continue;
-            if (intersect(
-                        circle[i].point.x,
-                        circle[i].point.y,
-                        circle[j].point.x,
-                        circle[j].point.y,
-                        circle[i].r,
-                        circle[j].r))
-                printf("\t  %d. circle \n", j + 1);
-        }
-        printf("\n");
-    }
-}
+#include <print.h>
 
 int main(int argc, char** argv)
 {
