@@ -1,17 +1,9 @@
-#include <calcul.h>
-#include <check_error.h>
 #include <stdio.h>
 #include <string.h>
 
-struct point {
-    double x;
-    double y;
-};
-
-struct circle {
-    struct point point;
-    double r;
-};
+#include <calcul.h>
+#include <check_error.h>
+#include <print.h>
 
 void Print_Error(char* str, int n)
 {
@@ -51,13 +43,13 @@ void Print_Error(char* str, int n)
         return;
     } else if (n == 5) {
         printf("%s", str);
-        printf("^\n");
+        printf("\n^\n");
         printf("Eror at column 0: expected \'circle\'\n\n");
         return;
     }
 };
 
-void print_result(struct circle* circle, int nCircle)
+void Print_Result(struct circle* circle, int nCircle)
 {
     for (int i = 0; i < nCircle; i++) {
         printf(" %d. circle(%.2lf %.2lf, %.2lf) \n",
@@ -65,13 +57,13 @@ void print_result(struct circle* circle, int nCircle)
                circle[i].point.x,
                circle[i].point.y,
                circle[i].r);
-        printf("\tperimetr = %.2f\n", Circle_perimeter(circle[i].r));
-        printf("\tarea = %.2f\n", Circle_area(circle[i].r));
+        printf("\tperimetr = %.2f\n", Circle_Perimeter(circle[i].r));
+        printf("\tarea = %.2f\n", Circle_Area(circle[i].r));
         printf("\tintersects: \n");
         for (int j = 0; j < nCircle; j++) {
             if (i == j)
                 continue;
-            if (intersect(
+            if (Intersect(
                         circle[i].point.x,
                         circle[i].point.y,
                         circle[j].point.x,
