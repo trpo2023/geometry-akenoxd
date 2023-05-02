@@ -4,10 +4,12 @@ OBJPATH = obj/src/lib
 
 all: bin/app 
 
-bin/app: obj/src/geometry/main.o obj/src/lib/lib.a
+test: bin/test
+
+bin/app: obj/src/geometry/main.o obj/src/lib/libAs.a
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-obj/src/lib/lib.a: obj/src/lib/print.o obj/src/lib/calcul.o obj/src/lib/check_error.o
+obj/src/lib/libAs.a: obj/src/lib/print.o obj/src/lib/calcul.o obj/src/lib/check_error.o
 	ar rcs $@ $^
 
 obj/src/geometry/main.o: src/geometry/main.c
@@ -23,6 +25,15 @@ obj/src/lib/calcul.o: src/lib/calcul.c
 	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o $@ -lm
 
 .PHONY: clean
+
+bin/test: obj/test/main.o  obj/test/test.o
+	$(CC) $(CFLAGS) -L obj/src/lib -l As obj/src/lib/check_error.o -o $@ $^ -lm
+
+obj/test/main.o: test/main.c
+	$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o $@ -I thirdparty
+
+obj/test/test.o: test/parser_test.c
+		$(CC) -c $(CFLAGS) $< $(CPPFLAGS) -o $@ -I thirdparty -I src/lib
 
 clean: 
 	rm obj/src/lib/*.o
