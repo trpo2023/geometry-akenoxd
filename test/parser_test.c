@@ -8,7 +8,7 @@
 #include <check_error.h>
 #include <print.h>
 
-CTEST(check_input_ok, t1)
+CTEST(checkInputOk, t1)
 {
     char* str = "circle(1.0 1.0, 2)";
     const int expected = 0;
@@ -16,7 +16,7 @@ CTEST(check_input_ok, t1)
     ASSERT_EQUAL(expected, real);
 }
 
-CTEST(check_input_fail_2, t1)
+CTEST(checka, t1)
 {
     char* str = "circle(as 1.0, 2)";
     const int expected = 1;
@@ -24,7 +24,7 @@ CTEST(check_input_fail_2, t1)
     ASSERT_EQUAL(expected, real);
 }
 
-CTEST(check_input_fail_3, t1)
+CTEST(checkb, t1)
 {
     char* str = "circle(1 B, 2)";
     const int expected = 2;
@@ -32,7 +32,7 @@ CTEST(check_input_fail_3, t1)
     ASSERT_EQUAL(expected, real);
 }
 
-CTEST(check_input_fail_3, t1)
+CTEST(checkc, t1)
 {
     char* str = "circle(1 4, L)";
     const int expected = 3;
@@ -40,15 +40,15 @@ CTEST(check_input_fail_3, t1)
     ASSERT_EQUAL(expected, real);
 }
 
-CTEST(check_input_fail_3, t1)
+CTEST(checkd, t1)
 {
-    char* str = "circle(1 4, -12)";
+    char* str = "circle(1 4, 0)";
     const int expected = 4;
     const int real = Check_Error(str);
     ASSERT_EQUAL(expected, real);
 }
 
-CTEST(check_input_fail_1, t1)
+CTEST(checkf, t1)
 {
     char* str = "circl(1.0 1.0, 2)";
     const int expected = 5;

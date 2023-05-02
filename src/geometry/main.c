@@ -19,7 +19,7 @@ int main(int argc, char** argv)
     }
 
     while (fgets(str, 100, data) != NULL) {
-        if (str[i] == '\0')
+        if (str[0] == '\0')
             break;
         if (Check_Error(str)) {
             Print_Error(str, Check_Error(str));
