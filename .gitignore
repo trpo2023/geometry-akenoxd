@@ -1,6 +1,6 @@
 app
 *.o
 .vscode
-lib.a
+*.a
 *.d
 bin/test
