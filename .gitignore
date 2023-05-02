@@ -1,0 +1,6 @@
+app
+*.o
+.vscode
+*.a
+*.d
+bin/test
